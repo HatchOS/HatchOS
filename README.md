@@ -1,4 +1,6 @@
 # HatchOS
 Open Source code of HatchOS.
 
-More info in the "Description" Repository.
+# Current Build
+Build 1000 (EXTREMELY EXPERIMENTAL BUILD)
+HatchOS Version 0
