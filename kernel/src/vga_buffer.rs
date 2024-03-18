@@ -185,13 +185,13 @@ pub fn _print(color: ColorCode, args: fmt::Arguments) {
 
 #[test_case]
 fn test_println_simple() {
-    println!("test_println_simple output");
+    println!(ColorCode::new(Color::Blue, Color::Black), "test_println_simple output");
 }
 
 #[test_case]
 fn test_println_many() {
     for _ in 0..200 {
-        println!("test_println_many output");
+        println!(ColorCode::new(Color::Blue, Color::Black), "test_println_many output");
     }
 }
 

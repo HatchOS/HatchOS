@@ -14,10 +14,6 @@ use core::panic::PanicInfo;
 entry_point!(main);
 
 fn main(boot_info: &'static BootInfo) -> ! {
-    use hatch_os::allocator;
-    use hatch_os::memory::{self, BootInfoFrameAllocator};
-    use x86_64::VirtAddr;
-
     hatch_os::bootstrap(boot_info);
 
     test_main();
