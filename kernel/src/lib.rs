@@ -8,8 +8,10 @@
 
 extern crate alloc;
 use core::panic::PanicInfo;
-use bootloader::{BootInfo};
+use bootloader::BootInfo;
 use crate::vga_buffer::{Color, ColorCode};
+#[cfg(test)]
+use bootloader::entry_point;
 
 pub mod allocator;
 pub mod gdt;
@@ -21,25 +23,25 @@ pub mod vga_buffer;
 
 pub fn bootstrap(boot_info: &'static BootInfo) {
     use x86_64::VirtAddr;
-    use memory::{BootInfoFrameAllocator};
-    println!(ColorCode::new(Color::Blue, Color::Black), "[Bootstrap] Initializing Global Descriptor Table (GDT)");
+    use memory::BootInfoFrameAllocator;
+    println!(ColorCode::new(Color::LightBlue, Color::Black), "[Bootstrap] Initializing Global Descriptor Table (GDT)");
     gdt::init();
-    println!(ColorCode::new(Color::Blue, Color::Black), "[Bootstrap] GDT Initialized");
-    println!(ColorCode::new(Color::Blue, Color::Black), "[Bootstrap] Initializing Interrupts.");
+    println!(ColorCode::new(Color::LightBlue, Color::Black), "[Bootstrap] GDT Initialized");
+    println!(ColorCode::new(Color::LightBlue, Color::Black), "[Bootstrap] Initializing Interrupts.");
     interrupts::init_idt();
-    println!(ColorCode::new(Color::Blue, Color::Black), "[Bootstrap] IDT Initialized");
+    println!(ColorCode::new(Color::LightBlue, Color::Black), "[Bootstrap] IDT Initialized");
     unsafe { interrupts::PICS.lock().initialize() };
-    println!(ColorCode::new(Color::Blue, Color::Black), "[Bootstrap] PICs Initialized");
+    println!(ColorCode::new(Color::LightBlue, Color::Black), "[Bootstrap] PICs Initialized");
     x86_64::instructions::interrupts::enable();
-    println!(ColorCode::new(Color::Blue, Color::Black), "[Bootstrap] Interrupts Loaded");
-    println!(ColorCode::new(Color::Blue, Color::Black), "[Bootstrap] Initializing Memory Manager.");
+    println!(ColorCode::new(Color::LightBlue, Color::Black), "[Bootstrap] Interrupts Loaded");
+    println!(ColorCode::new(Color::LightBlue, Color::Black), "[Bootstrap] Initializing Memory Manager.");
     let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
     let mut mapper = unsafe { memory::init(phys_mem_offset) };
     let mut frame_allocator = unsafe { BootInfoFrameAllocator::init(&boot_info.memory_map) };
     
     allocator::init_heap(&mut mapper, &mut frame_allocator).expect("heap initialization failed");
-    println!(ColorCode::new(Color::Blue, Color::Black), "[Bootstrap] Memory Manager Initialized");
-    println!(ColorCode::new(Color::Blue, Color::Black), "[Bootstrap] System Bootstrapped");
+    println!(ColorCode::new(Color::LightBlue, Color::Black), "[Bootstrap] Memory Manager Initialized");
+    println!(ColorCode::new(Color::LightBlue, Color::Black), "[Bootstrap] System Bootstrapped");
 }
 pub trait Testable {
     fn run(&self) -> ();
@@ -94,15 +96,12 @@ pub fn hlt_loop() -> ! {
 }
 
 #[cfg(test)]
-use bootloader::{entry_point, BootInfo};
-
-#[cfg(test)]
 entry_point!(test_kernel_main);
 
 /// Entry point for `cargo xtest`
 #[cfg(test)]
 fn test_kernel_main(_boot_info: &'static BootInfo) -> ! {
-    init();
+    bootstrap(_boot_info);
     test_main();
     hlt_loop();
 }
@@ -112,3 +111,4 @@ fn test_kernel_main(_boot_info: &'static BootInfo) -> ! {
 fn panic(info: &PanicInfo) -> ! {
     test_panic_handler(info)
 }
+
