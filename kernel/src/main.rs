@@ -44,15 +44,6 @@ fn panic(info: &PanicInfo) -> ! {
     hatch_os::test_panic_handler(info)
 }
 
-async fn async_number() -> u32 {
-    42
-}
-
-async fn example_task() {
-    let number = async_number().await;
-    println!(ColorCode::new(Color::Yellow, Color::Black), "async number: {}", number);
-}
-
 #[test_case]
 fn trivial_assertion() {
     assert_eq!(1, 1);

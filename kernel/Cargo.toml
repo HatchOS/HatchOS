@@ -50,3 +50,6 @@ test-args = [
     "none",
 ]
 test-success-exit-code = 33 # (0x10 << 1) | 1
+
+[build-dependencies]
+cc = "1.0.90"

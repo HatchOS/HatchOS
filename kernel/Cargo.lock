@@ -27,6 +27,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ca7c184781ceb5660872f833fc6bd64ec9ae2500f8c65354705af541e4c28f7f"
 
 [[package]]
+name = "cc"
+version = "1.0.90"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8cd6604a82acf3039f1144f54b8eb34e91ffba622051189e71b781822d5ee1f5"
+
+[[package]]
 name = "cfg-if"
 version = "0.1.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -98,6 +104,7 @@ name = "hatch_os"
 version = "0.1.0"
 dependencies = [
  "bootloader",
+ "cc",
  "conquer-once",
  "crossbeam-queue",
  "futures-util",
